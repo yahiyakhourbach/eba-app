@@ -16,10 +16,14 @@ export default function Login() {
     mutate(data, {
       onSuccess: (response) => {
         signIn(response);
-        router.push('/');
+        if (response.is_moderator) {
+          router.push('/(moderator)/');
+        } else {
+          router.push('/(app)/');
+        }
       },
       onError: (errors) => {
-        if (errors.response?.data) setErrors('invalid credentiales');
+        if (errors.response?.data) setErrors('invalid credentials');
       },
     });
   };
