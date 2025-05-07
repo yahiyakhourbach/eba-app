@@ -93,6 +93,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "0.0.1"
+        resValue "string", "google_maps_api_key", project.hasProperty("GOOGLE_API_KEY") ? System.getenv("GOOGLE_API_KEY") : "default api key "
+
     }
     signingConfigs {
         debug {

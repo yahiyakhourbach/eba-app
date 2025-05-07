@@ -2,6 +2,7 @@ import Feather from '@expo/vector-icons/Feather';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { showMessage } from 'react-native-flash-message';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 import { useManageBooking } from '@/api/booking';
 import { useEvent } from '@/api/event';
@@ -68,7 +69,8 @@ function BookingPressable({ event, isBooking }: BookingPressableProps) {
               ?.error;
             showErrorMessage(errordata);
           },
-        });
+        }
+      );
     }
   };
   return (
@@ -82,6 +84,35 @@ function BookingPressable({ event, isBooking }: BookingPressableProps) {
     </Pressable>
   );
 }
+
+type MiniTypeProps = {
+  location: { lat: number; lng: number };
+};
+
+const MiniMap = ({ location }: MiniTypeProps) => {
+  return (
+    <View style={{ height: 208, width: '100%', overflow: 'hidden' }}>
+      <MapView
+        style={{ flex: 1 }}
+        provider={PROVIDER_GOOGLE}
+        className=""
+        initialRegion={{
+          latitude: location.lat,
+          longitude: location.lng,
+          latitudeDelta: 0.01,
+          longitudeDelta: 0.01,
+        }}
+      >
+        <Marker
+          coordinate={{
+            latitude: location.lat,
+            longitude: location.lng,
+          }}
+        />
+      </MapView>
+    </View>
+  );
+};
 
 export default function EventScreen() {
   const router = useRouter();
@@ -112,7 +143,7 @@ export default function EventScreen() {
       <Stack.Screen options={{ headerShown: false }} />
       <Pressable
         className="flex flex-row items-center gap-2"
-        onPress={() => router.push('/event')}
+        onPress={() => router.push('/')}
       >
         <Feather name="arrow-left-circle" size={18} color="black" />
         <Text className="font-semibold">Events</Text>
@@ -133,6 +164,11 @@ export default function EventScreen() {
       <Text className="text-lg font-semibold">
         starts on: {formatDate(data.date)}
       </Text>
+      <View className="flex flex-row flex-wrap items-center">
+        <Text className="text-lg font-semibold">location : </Text>
+        <Text className="text-lg font-semibold">{`${data.city} ${data.street} ${data.zipcode}`}</Text>
+      </View>
+      <MiniMap location={data.location} />
       <BookingPressable event={data.id} isBooking={data.isBooking as boolean} />
     </View>
   );

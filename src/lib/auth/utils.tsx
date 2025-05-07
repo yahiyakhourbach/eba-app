@@ -3,7 +3,7 @@ import { getItem, removeItem, setItem } from '@/lib/storage';
 const TOKEN = 'token';
 
 export type TokenType = {
-  isModerator: boolean;
+  is_moderator: boolean;
   access: string;
   refresh: string;
 };
