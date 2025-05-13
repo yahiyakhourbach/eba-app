@@ -26,8 +26,13 @@ export default function Register() {
         router.replace('/registration-success');
       },
       onError: (errors) => {
-        if (errors.response?.data)
-          setErrorMsg(() => 'Error failed to Register');
+        if (errors.response?.data) {
+          const errorMsgs = errors.response?.data;
+          const errorString = Object.entries(errorMsgs)
+            .map(([key, value]) => `${key}: ${(value as string[]).join(', ')}`)
+            .join('\n');
+          setErrorMsg(() => errorString);
+        }
       },
     });
   };

@@ -9,11 +9,12 @@ import { useEvent } from '@/api/event';
 import {
   ActivityIndicator,
   Pressable,
+  ScrollView,
   showErrorMessage,
   Text,
   View,
 } from '@/components/ui';
-import { formatDate } from '@/lib';
+import { formatDate, useAuth } from '@/lib';
 
 type BookingPressableProps = {
   event: number;
@@ -76,7 +77,7 @@ function BookingPressable({ event, isBooking }: BookingPressableProps) {
   return (
     <Pressable disabled={isPending} onPress={handlePress}>
       <Text
-        className={`mt-2.5 w-fit rounded ${booked ? 'bg-red-400' : 'bg-green-500'} px-1 py-2 text-center text-lg font-medium text-white`}
+        className={`my-2.5 w-fit rounded ${booked ? 'bg-red-400' : 'bg-green-500'} px-1 py-2 text-center text-lg font-medium text-white`}
       >
         {isPending && <ActivityIndicator />}
         {booked ? 'Cancel' : 'Book Now'}
@@ -117,6 +118,7 @@ const MiniMap = ({ location }: MiniTypeProps) => {
 export default function EventScreen() {
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  const isModerator = useAuth.getState().token?.is_moderator;
   const { isPending, data, isError } = useEvent({
     variables: { id: id as string },
   });
@@ -139,7 +141,7 @@ export default function EventScreen() {
   }
 
   return (
-    <View className="mx-2 flex-1">
+    <ScrollView className="mx-2 flex-1">
       <Stack.Screen options={{ headerShown: false }} />
       <Pressable
         className="flex flex-row items-center gap-2"
@@ -169,7 +171,12 @@ export default function EventScreen() {
         <Text className="text-lg font-semibold">{`${data.city} ${data.street} ${data.zipcode}`}</Text>
       </View>
       <MiniMap location={data.location} />
-      <BookingPressable event={data.id} isBooking={data.isBooking as boolean} />
-    </View>
+      {!isModerator && (
+        <BookingPressable
+          event={data.id}
+          isBooking={data.isBooking as boolean}
+        />
+      )}
+    </ScrollView>
   );
 }

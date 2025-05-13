@@ -6,6 +6,7 @@ export type TokenType = {
   is_moderator: boolean;
   access: string;
   refresh: string;
+  username: string;
 };
 
 export const getToken = () => getItem<TokenType>(TOKEN);

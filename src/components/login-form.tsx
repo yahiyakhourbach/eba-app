@@ -25,7 +25,7 @@ const schema = z.object({
     .string({
       required_error: 'Password is required',
     })
-    .min(8, 'Password must be at least 6 characters')
+    .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/, ' it should contain at least uppercase letter')
     .regex(/[a-z]/, 'it should contain at least lowercase letter')
     .regex(/\d/, 'it should contain at least one number')

@@ -6,7 +6,6 @@ import { useEvents } from '@/api/event';
 import { type EventType } from '@/api/event';
 import SearchField from '@/components/search-field';
 import { ActivityIndicator, Text, View } from '@/components/ui';
-import { useAuth } from '@/lib';
 import { useSearchEventStor } from '@/lib/event';
 
 type EventCardProp = {
@@ -35,7 +34,6 @@ const EventCard = ({ item }: EventCardProp) => {
 
 const EventsContainer = () => {
   const search = useSearchEventStor((state) => state.search);
-  const moderator = useAuth.getState().token?.is_moderator;
   const { data, isPending, isError, refetch, isRefetching } = useEvents({
     variables: { search },
   });
@@ -51,14 +49,21 @@ const EventsContainer = () => {
   if (isError) {
     return (
       <View className="flex items-center justify-center">
-        <Text>Oops Something Went Wrong {':('}</Text>
+        <Text> couldn't find event with this title {':('}</Text>
       </View>
     );
   }
   return (
     <FlashList
+      ListEmptyComponent={() => (
+        <Text className="my-12 flex-1 justify-center self-center">
+          There is no Events for now
+        </Text>
+      )}
       data={data}
-      ListHeaderComponent={() => <Text>yes he is {moderator}</Text>}
+      ListHeaderComponent={() => (
+        <Text className="mx-3.5 text-xl font-bold">Events</Text>
+      )}
       keyExtractor={(item) => item.id.toString()}
       onRefresh={refetch}
       refreshing={isRefetching}
