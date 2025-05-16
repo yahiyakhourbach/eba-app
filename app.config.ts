@@ -41,6 +41,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     bundleIdentifier: Env.BUNDLE_ID,
     config: {
       usesNonExemptEncryption: false, // Avoid the export compliance warning on the app store
+      googleMapsApiKey: Env.GOOGLE_API_KEY,
     },
   },
   experiments: {
@@ -52,6 +53,11 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       backgroundColor: '#2E3C4B',
     },
     package: Env.PACKAGE,
+    config: {
+      googleMaps: {
+        apiKey: Env.GOOGLE_API_KEY,
+      },
+    },
   },
   web: {
     favicon: './assets/favicon.png',

@@ -9,4 +9,4 @@ export type RegisterResponse = {
   username: string;
   email: string;
   is_moderator: boolean;
-}
+};

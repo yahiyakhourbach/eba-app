@@ -27,7 +27,14 @@ module.exports = function (api) {
           ],
         },
       ],
-      'react-native-reanimated/plugin',
+      // Updated Reanimated plugin with strict mode disabled
+      [
+        'react-native-reanimated/plugin',
+        {
+          skipReanimatedWarnings: true,
+          disableStrictMode: true,
+        },
+      ],
     ],
   };
 };

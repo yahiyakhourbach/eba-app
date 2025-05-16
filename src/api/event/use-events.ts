@@ -7,17 +7,18 @@ import { client } from '../common';
 import { type EventType } from './types';
 
 type Response = EventType[];
-type Variables = void;
+type Variables = { search: string };
 
 export const useEvents = createQuery<Response, Variables, AxiosError>({
   queryKey: ['events'],
-  fetcher: () => {
+  fetcher: ({ search }) => {
     const token = useAuth.getState().token;
     return client
       .get('/api/events/', {
         headers: {
           Authorization: 'JWT ' + token?.access,
         },
+        params: { search: search },
       })
       .then((res) => res.data);
   },

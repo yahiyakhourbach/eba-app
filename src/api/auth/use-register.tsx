@@ -17,5 +17,4 @@ export const useRegister = createMutation<
       url: '/api/auth/register/',
       data: variables,
     }).then((res) => res.data),
-}
-);
+});
